@@ -1,5 +1,5 @@
 # ChatGPTintro
-This just Chat GPT modile app intro animation
+This just Chat GPT modile app intro animation, written in SwiftUI
 
 
 https://github.com/almatkai/ChatGPTintro/assets/92521753/fa673dc8-9c8e-417b-ac7c-1558bd54c9cf
