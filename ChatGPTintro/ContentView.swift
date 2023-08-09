@@ -8,19 +8,93 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    private let foregroundColors: [Color] = [.blue, .yellow, .red, .green, .purple, .orange, .pink, .teal, Color(uiColor: #colorLiteral(red: 0.04696316272, green: 0.06727208942, blue: 0.2167890072, alpha: 1))]
+    private let backgroundColors: [Color] = [Color(uiColor: #colorLiteral(red: 0.1860292554, green: 0.17613253, blue: 0.1892024577, alpha: 1)), .gray, .cyan, .indigo, .mint, .red, .green, .yellow, .purple]
+    
+    private let slogan = [
+        "Let's Create",
+        "Think",
+        "Let's BrainStorm",
+        "Imagine",
+        "Innovate",
+        "Design",
+        "Collaborate",
+        "Build",
+        "Explore",
+        "Inspire",
+        "Dream",
+        "Express",
+        "Iterate",
+        "Problem Solve"
+    ]
+
+    @State private var index = 8
+    @State private var sloganInd = 0
+    @State private var textLength: CGFloat? = nil
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            HStack(alignment: .center){
+                Circle().frame(width: 45)
+                    .foregroundColor(foregroundColors[index])
+                    .background {
+                        HStack {
+                            Text(slogan[sloganInd])
+                                .font(.system(size: 40))
+                                .frame(width: textLength)
+                                .foregroundColor(foregroundColors[index])
+                        }
+                        .frame(width: textLength)
+                        .clipped()
+                        .offset(x: textLength == 0 ? 5 : -((textLength ?? 0) + 45)/2 - 5)
+                    }
+                    .offset(x: textLength == 0 ? 0 : ((textLength ?? 0) + 45)/2)
+            }
         }
-        .padding()
+        .ignoresSafeArea()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(backgroundColors[index])
+        .onAppear(perform: {
+            textSize(slogan[sloganInd])
+            intro()
+        })
+    }
+    private func textSize(_ text : String){
+            textLength = NSString(string: text)
+            .size(withAttributes: [.font: UIFont
+                .systemFont(ofSize: 40)]).width
+        }
+    private func intro() {
+        Timer.scheduledTimer(withTimeInterval: 4, repeats: true) { timer in
+            withAnimation(.interactiveSpring(response: 0.4, dampingFraction: 0.7, blendDuration: 0.9)) {
+                textLength = 0
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                if textLength == 0 {
+                    var oldIndex = index
+                    
+                    repeat {
+                        index = Int.random(in: 0..<foregroundColors.count)
+                    } while index == oldIndex
+                    
+                    oldIndex = sloganInd
+                    repeat {
+                        sloganInd = Int.random(in: 0..<slogan.count)
+                    } while sloganInd == oldIndex
+
+                    withAnimation(.interactiveSpring(response: 0.4, dampingFraction: 0.7, blendDuration: 0.7)) {
+                        textSize(slogan[sloganInd])
+                    }
+                }
+            }
+        }
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//    }
+//}
